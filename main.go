@@ -166,12 +166,7 @@ func main() {
 	r.GET("/configure", Log(WebHandler(configureHandler, "configure")))
 	r.POST("/configure", Log(WebHandler(configureHandler, "configure")))
 
-	// SAML
-	r.GET("/sso", Log(ssoHandler))
-	r.GET("/saml/metadata", Log(samlHandler))
-	r.POST("/saml/metadata", Log(samlHandler))
-	r.GET("/saml/acs", Log(samlHandler))
-	r.POST("/saml/acs", Log(samlHandler))
+	
 
 	r.GET("/signin", Log(WebHandler(signinHandler, "signin")))
 	r.GET("/signout", Log(WebHandler(signoutHandler, "signout")))
