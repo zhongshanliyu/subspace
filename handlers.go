@@ -21,25 +21,7 @@ var (
 	maxProfilesPerUser = 10
 )
 
-func ssoHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	if token := samlSP.GetAuthorizationToken(r); token != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-	logger.Debugf("SSO: require account handler")
-	samlSP.RequireAccountHandler(w, r)
-	return
-}
 
-func samlHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	if samlSP == nil {
-		logger.Warnf("SAML is not configured")
-		http.NotFound(w, r)
-		return
-	}
-	logger.Debugf("SSO: samlSP.ServeHTTP")
-	samlSP.ServeHTTP(w, r)
-}
 
 func wireguardQRConfigHandler(w *Web) {
 	profile, err := config.FindProfile(w.ps.ByName("profile"))
