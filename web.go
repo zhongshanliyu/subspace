@@ -186,44 +186,7 @@ func WebHandler(h func(*Web), section string) httprouter.Handle {
 		}
 
 		// Needs a new session.
-		if samlSP != nil {
-			if token := samlSP.GetAuthorizationToken(r); token != nil {
-				r = r.WithContext(samlsp.WithToken(r.Context(), token))
-
-				email := token.StandardClaims.Subject
-				if email == "" {
-					Error(w, fmt.Errorf("SAML token missing email"))
-					return
-				}
-
-				logger.Infof("SAML: finding user with email %q", email)
-				user, err := config.FindUserByEmail(email)
-				if err != nil && err != ErrUserNotFound {
-					Error(w, err)
-					return
-				}
-
-				if user.ID == "" {
-					logger.Infof("SAML: creating user with email %q", email)
-					user, err = config.AddUser(email)
-					if err != nil {
-						Error(w, err)
-						return
-					}
-				}
-
-				web.User = user
-				web.Admin = user.Admin
-				if err := web.SigninSession(false, user.ID); err != nil {
-					Error(web.w, err)
-					return
-				}
-
-				h(web)
-				return
-			}
-		}
-
+	
 		logger.Warnf("auth: sign in required")
 		web.Redirect("/signin")
 	}
