@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/julienschmidt/httprouter"
+
 	"golang.org/x/crypto/bcrypt"
 
 	qrcode "github.com/skip2/go-qrcode"
@@ -22,6 +22,9 @@ var (
 )
 
 
+func samlHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	samlSP.ServeHTTP(w, r)
+}
 
 func wireguardQRConfigHandler(w *Web) {
 	profile, err := config.FindProfile(w.ps.ByName("profile"))
